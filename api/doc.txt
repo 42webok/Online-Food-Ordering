@@ -1,0 +1,8 @@
+For creating the api of project :: 
+==================================For Admin==========================================
+
+For Login : i added a new column for token in admin table by default it will Null
+it retrn the token in response ok
+
+
+
