@@ -5313,3 +5313,9 @@ h5.panel-title span {
     height: 10px;
     width: 30px;
 }
+
+
+/*  */
+.shop-catigory .active{
+    color: red !important;
+}
