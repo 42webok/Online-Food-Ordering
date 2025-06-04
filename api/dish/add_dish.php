@@ -25,7 +25,7 @@ $user = authRequired();
 
     // Handle image upload
     $uploadDir = realpath(__DIR__ . '/../../admin/assets/uploads') . '/';
-    // Ensure upload directory exists and is writable
+   
     if (!is_dir($uploadDir)) {
         if (!mkdir($uploadDir, 0777, true)) {
             echo json_encode(['status' => 'error', 'message' => 'Failed to create upload directory.']);
@@ -93,7 +93,7 @@ if (!move_uploaded_file($imageTmpName, $targetPath)) {
 
     
     // Store relative path for web access
-    $imagePath = 'assets/uploads/' . $uniqueName;
+    $imagePath = $uniqueName;
 
 
 // Validate required fields
