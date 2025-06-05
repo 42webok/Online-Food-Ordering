@@ -34,6 +34,8 @@ if($del_id == 0 || $del_id == ""){
 $check = "DELETE FROM dish WHERE id = '$del_id'";
 $check_result = mysqli_query($conn , $check);
 if($check_result){
+    $query = "DELETE FROM dish_details WHERE dish_id = '$del_id'";
+    mysqli_query($conn , $query);
     echo json_encode([
         "message" => "Dish deleted successfully !"
     ]);
