@@ -108,6 +108,18 @@ if(!isset($_SESSION['IS_LOGIN'])){
               <span class="menu-title">Dish</span>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact_data.php">
+              <i class="mdi mdi-view-headline menu-icon"></i>
+              <span class="menu-title">Contact Us</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="banner.php">
+              <i class="mdi mdi-view-headline menu-icon"></i>
+              <span class="menu-title">Banner</span>
+            </a>
+          </li>
 		  
           
         </ul>
