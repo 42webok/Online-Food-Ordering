@@ -5319,3 +5319,13 @@ h5.panel-title span {
 .shop-catigory .active{
     color: red !important;
 }
+.radio_size , .custom_check_box{
+    height: auto !important;
+    width: auto !important;
+}
+.custom_li{
+    gap: 10px !important;
+}
+.email_alert{
+    transform: translateY(-23px);
+}

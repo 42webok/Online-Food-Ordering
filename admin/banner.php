@@ -28,7 +28,7 @@ $res=mysqli_query($con,$sql);
 <div class="card">
     <div class="card-body">
         <h1 class="grid_title">Banner Master</h1>
-        <a href="manage_banner.php" class="add_link">Add Banner</a>
+        <a href="manage_banner.php" class="add_link btn btn-sm btn-danger">Add Banner</a>
         <div class="row grid_box">
 
             <div class="col-12">

@@ -23,10 +23,10 @@ function get_safe_value($str){
 // to open any other link 
 function redirect($link){
 	?>
-	<script>
-	window.location.href='<?php echo $link?>';
-	</script>
-	<?php
+<script>
+window.location.href = '<?php echo $link?>';
+</script>
+<?php
 	die();
 }
 ?>
