@@ -2,8 +2,8 @@
 include("header.php");
 include("function_inc.php");
 $path = "admin/assets/uploads/";
+$dish_array = array("Veg" , "Non-Veg");
 ?>
-
 
 
 
@@ -21,7 +21,23 @@ $path = "admin/assets/uploads/";
 </div>
 <div class="shop-page-area pt-100 pb-100">
     <div class="container">
-        <div class="row flex-row-reverse">
+        <div class="row mb-5 pb-3">
+            <div class="col-10">
+            </div>
+            <div class="col-2">
+                <label for="Dish_type">Dish Type</label>
+                <select  class="form-control dish-type-select">
+                    <option value="" selected disabled>Select Dish Type</option>
+                    <option value="" >Both</option>
+                    <?php
+                    foreach($dish_array as $dish){
+                        echo '<option vaue="'.$dish.'">'.$dish.'</option>';
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <div class="row flex-row-reverse ">
             <div class="col-lg-9">
                 <!-- <div class="banner-area pb-30">
                     <a href="product-details.html"><img alt="" src="assets/img/banner/banner-49.jpg"></a>
@@ -95,29 +111,39 @@ $(document).ready(function() {
         getData();
     });
 
+    $('.dish-type-select').on('change', function() {
+        getData();
+    });
+
     function getData() {
         let checkedValues = [];
         $('.custom_check_box:checked').each(function() {
             checkedValues.push($(this).val());
         });
 
+        let dishType = $('.dish-type-select').val();
+
         $.ajax({
             type: "POST",
             url: "cat_data.php",
             data: {
+                dish_type: dishType,
                 cat_id: checkedValues
             },
             success: function(data) {
                 let response = JSON.parse(data);
                 console.log(response);
+               
                 let path = 'admin/assets/uploads/';
                 let html = '';
 
                 if (Array.isArray(response) && response.length > 0) {
                     response.forEach(function(item) {
                         let attrHTML = '';
-                        item.attributes.forEach(function(attr){
-                            attrHTML += `<label><input class="radio_size" type="radio" name="attr_${item.id}"> ${attr.attribute} - ${attr.price}</label><br>`;
+                        item.attributes.forEach(function(attr) {
+                            // console.log(attr.dish_detail_id);
+                            attrHTML +=
+                                `<label><input class="radio_size" value="${attr.dish_detail_id}"  type="radio" name="attr_${item.id}"> ${attr.attribute} - ${attr.price}</label><br>`;
                         })
                         html += `
                             <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
@@ -130,8 +156,16 @@ $(document).ready(function() {
                                     <div class="product-content">
                                         <h4><a href="javascript:void(0);">${item.dish}</a></h4>
                                         <div class="product-price-wrapper">
-                                            <span>${attrHTML}</span>
+                                            <span class="d-flex gap-2 flex-wrap">${attrHTML}</span>
                                         </div>
+                                       <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                           <div class="btn btn-sm btn-dark" onclick="counter(-1 , ${item.id})">-</div>
+                                           <input type="number" value="0" width="60px" readonly  id="custom_counter${item.id}">
+                                           <div class="btn btn-sm btn-dark" onclick="counter(1 , ${item.id})">+</div>
+                                        </div>
+                                         <div class="btn btn-sm btn-danger" onclick="add_to_cart(${item.id})">Add to Cart</div>
+                                       </div>
                                     </div>
                                 </div>
                             </div> 
@@ -146,4 +180,18 @@ $(document).ready(function() {
     }
 
 });
+
+
+function counter(amount , id) {
+    let counter = document.getElementById('custom_counter'+id);
+    let val = Number(counter.value) + amount;
+    if(val < 0) val = 0;
+    counter.value = val;
+}
+
+function add_to_cart(item_id){
+    let quantity = $('#custom_counter'+item_id).val(); 
+    let attr_id =  $(`input[name="attr_${item_id}"]:checked`).val();
+    
+}
 </script>

@@ -58,7 +58,7 @@ $res=mysqli_query($con,$sql);
                                         echo $row['category'];
                                     ?>
                                 </td>
-                                <td><?php echo $row['dish']?></td>
+                                <td><?php echo $row['dish']?> <?php echo "<small class='text-danger'>(" .strtoupper($row['dish_type']) . ")</small>"?></td>
                                 <td><?php echo $row['dish_detail']?></td>
                                 <td><img src="assets/uploads/<?php echo $row['image']?>" class="img-fluid" alt="Food"></td>
                                 <td><?php

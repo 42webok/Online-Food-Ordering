@@ -2,6 +2,7 @@
 include('top.php');
 $msg="";
 $category_id="";
+$dish_type="";
 $dish="";
 $dish_detail="";
 $image="";
@@ -16,6 +17,7 @@ if(isset($_GET['id']) && $_GET['id']>0){
 	$row=mysqli_fetch_assoc(mysqli_query($con,"select * from dish where id='$id'"));
 	$category_id=$row['category_id'];
 	$dish=$row['dish'];
+	$dish_type=$row['dish_type'];
 	$dish_detail=$row['dish_detail'];
     $image = $row['image'];
 
@@ -31,6 +33,7 @@ if(isset($_GET['id']) && $_GET['id']>0){
 if(isset($_POST['submit'])){
 	$category_id=get_safe_value($_POST['category_id']);
 	$dish=get_safe_value($_POST['dish']);
+	$dish_type=get_safe_value($_POST['dish_type']);
 	$dish_detail=get_safe_value($_POST['dish_detail']);
 	$added_on=date('Y-m-d h:i:s');
     $attribute = $_POST['attribute'];
@@ -50,7 +53,7 @@ if(isset($_POST['submit'])){
 		$msg="Dish Number already Exist";
 	}else{
 		if($id==''){
-			mysqli_query($con,"insert into dish(category_id,dish,dish_detail,image,status,added_on) values('$category_id','$dish','$dish_detail','$image_name',1,'$added_on')");
+			mysqli_query($con,"insert into dish(category_id,dish,dish_detail,dish_type,image,status,added_on) values('$category_id','$dish','$dish_detail','$dish_type','$image_name',1,'$added_on')");
             $last_id = mysqli_insert_id($con);
             for($n=0; $n<sizeof($attribute); $n++){
                 $attribute[$n] = get_safe_value($attribute[$n]);
@@ -59,7 +62,7 @@ if(isset($_POST['submit'])){
             }
 
 		}else{
-      $upQuery = "update dish set category_id='$category_id', dish_detail='$dish_detail', dish='$dish' ";
+      $upQuery = "update dish set category_id='$category_id', dish_detail='$dish_detail', dish='$dish' , dish_type='$dish_type' ";
       if($image_name != ''){
         $upQuery .= " , image = '$image_name'";
       }
@@ -77,6 +80,9 @@ if(isset($_POST['submit'])){
 		redirect('dish.php');
 	}
 }
+
+$dish_type_array =  array("Veg" , "Non-Veg");
+
 ?>
 <div class="row">
     <h1 class="grid_title ml10 ml15">Manage Dish</h1>
@@ -97,6 +103,17 @@ if(isset($_POST['submit'])){
                            }
 
                          ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Diah Type</label>
+                        <select name="dish_type" required class="form-control">
+                            <option value="" disabled selected>Select Dish Type</option>
+                            <?php 
+                            foreach($dish_type_array as $dish_arr ){
+                                echo '<option value="' .$dish_arr . '" ' . ($dish_arr == $dish_type ? "selected" : "") . '>' . $dish_arr . '</option>';
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="form-group">

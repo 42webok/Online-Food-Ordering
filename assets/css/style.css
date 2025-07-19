@@ -5329,3 +5329,14 @@ h5.panel-title span {
 .email_alert{
     transform: translateY(-23px);
 }
+
+.product-content input[type="number"]{
+    width: 71px !important;
+    height: 31px;
+}
+.product-content .btn{
+    cursor: pointer !important;
+}
+.product-price-wrapper span{
+    gap: 5px !important;
+}

@@ -10,6 +10,7 @@ $attribute_array = [];
 $category_id = $dish = $dish_detail = $targetPath = '';
 $response = [];
 $category_id = get_safe_value( $_POST[ 'category_id' ] );
+$dish_type = get_safe_value( $_POST[ 'dish_type' ] );
 $dish = get_safe_value( $_POST[ 'dish' ] );
 $dish_detail = get_safe_value( $_POST[ 'dish_detail' ] );
 $attribute = $_POST[ 'attribute' ];
@@ -80,7 +81,7 @@ if ( !move_uploaded_file( $imageTmpName, $targetPath ) ) {
 // Store relative path for web access
 $imagePath = $uniqueName;
 
-if ( empty( $category_id ) || $category_id == 0 || empty( $dish ) || empty( $dish_detail ) ) {
+if ( empty( $category_id ) || $category_id == 0 || empty( $dish ) || empty( $dish_detail ) || empty($dish_type)) {
     echo json_encode( [
         'status' => 'error',
         'message' => 'Please fill all fields!'
@@ -110,8 +111,8 @@ if ( mysqli_num_rows( $check_result ) > 0 ) {
 // Insert the dish
 $added_on = date( 'Y-m-d h:i:s' );
 $status = 1;
-$query = "INSERT INTO dish (category_id, dish, dish_detail, image, added_on, status) 
-          VALUES ('$category_id', '$dish', '$dish_detail', '$imagePath', '$added_on', '$status')";
+$query = "INSERT INTO dish (category_id, dish, dish_detail,dish_type, image, added_on, status) 
+          VALUES ('$category_id', '$dish', '$dish_detail', '$dish_type' , '$imagePath', '$added_on', '$status')";
 $result = mysqli_query( $conn, $query );
 $last_id = mysqli_insert_id( $conn );
 

@@ -12,6 +12,7 @@ $user = authRequired();
 $attribute_array = [];
 $edit_id = get_safe_value($_POST['edit_id']);
 $category_id = get_safe_value($_POST['category_id']);
+$dish_type = get_safe_value($_POST['dish_type']);
 $dish = get_safe_value($_POST['dish'] );
 $dish_detail = get_safe_value($_POST['dish_detail'] );
 
@@ -22,7 +23,7 @@ $price = $_POST[ 'price' ];
 $dish_image = $_FILES['image'] ;
 
 // Validate required fields 
-if (empty($edit_id) || empty($category_id) || empty($dish) || empty($dish_detail)) {
+if (empty($edit_id) || empty($category_id) || empty($dish) || empty($dish_detail) || empty($dish_type)) {
     echo json_encode([
         "error" => "true",
         "message" => "All fields are required!"
@@ -66,6 +67,7 @@ $query = "UPDATE dish SET
     dish = '$dish',
     dish_detail = '$dish_detail',
     category_id = '$category_id',
+    dish_type = '$dish_type',
     status = '1',
     added_on = NOW(),
     image = '$dish_image_name'

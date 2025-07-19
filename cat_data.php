@@ -13,6 +13,10 @@ if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' ) {
         // safe conversion
         $query .= " AND category_id IN ($data)";
     }
+    if(!empty( $_POST[ 'dish_type' ] ) ){
+        $dish_type = $_POST[ 'dish_type' ];
+        $query .= " AND dish_type = '$dish_type'";
+    }
 
     $result = mysqli_query( $con, $query );
 
@@ -20,7 +24,7 @@ if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' ) {
         while ( $rows = mysqli_fetch_assoc( $result ) ) {
             $dish_id = $rows[ 'id' ];
             $rows['attributes'] = [];
-            $att_query = "SELECT attribute , price FROM dish_details WHERE dish_id = $dish_id AND status = 1 ";
+            $att_query = "SELECT id as dish_detail_id ,  attribute , price FROM dish_details WHERE dish_id = $dish_id AND status = 1 ";
             $res = mysqli_query( $con, $att_query );
             if ( mysqli_num_rows( $res ) > 0 ) {
                 while ( $row = mysqli_fetch_assoc( $res ) ) {
