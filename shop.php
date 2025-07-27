@@ -26,9 +26,9 @@ $dish_array = array("Veg" , "Non-Veg");
             </div>
             <div class="col-2">
                 <label for="Dish_type">Dish Type</label>
-                <select  class="form-control dish-type-select">
+                <select class="form-control dish-type-select">
                     <option value="" selected disabled>Select Dish Type</option>
-                    <option value="" >Both</option>
+                    <option value="">Both</option>
                     <?php
                     foreach($dish_array as $dish){
                         echo '<option vaue="'.$dish.'">'.$dish.'</option>';
@@ -133,17 +133,23 @@ $(document).ready(function() {
             success: function(data) {
                 let response = JSON.parse(data);
                 console.log(response);
-               
+
                 let path = 'admin/assets/uploads/';
                 let html = '';
 
-                if (Array.isArray(response) && response.length > 0) {
-                    response.forEach(function(item) {
+                let cartIds = response.cart_ids; 
+                let items = response.products;
+
+                
+                if (Array.isArray(items) && items.length > 0) {
+                    items.forEach(function(item) {
                         let attrHTML = '';
-                        item.attributes.forEach(function(attr) {
-                            // console.log(attr.dish_detail_id);
+                        item.attributes.forEach(function(attr , index) {
+                             let addedText = attr.dish_detail_id in cartIds ? '(Added)' : '';
+                             let addedQnty = attr.dish_detail_id in cartIds ? cartIds[attr.dish_detail_id] : '';
+                              
                             attrHTML +=
-                                `<label><input class="radio_size" value="${attr.dish_detail_id}"  type="radio" name="attr_${item.id}"> ${attr.attribute} - ${attr.price}</label><br>`;
+                                `<label><input class="radio_size" value="${attr.dish_detail_id}"  type="radio" name="attr_${item.id}"> ${attr.attribute} - ${attr.price}</label><sub class="text-success" id="add_data_${attr.dish_detail_id}">${addedText} ${addedQnty} </sub><br>`;
                         })
                         html += `
                             <div class="product-width col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-30">
@@ -182,16 +188,46 @@ $(document).ready(function() {
 });
 
 
-function counter(amount , id) {
-    let counter = document.getElementById('custom_counter'+id);
+function counter(amount, id) {
+    let counter = document.getElementById('custom_counter' + id);
     let val = Number(counter.value) + amount;
-    if(val < 0) val = 0;
+    if (val < 0) val = 0;
     counter.value = val;
 }
 
-function add_to_cart(item_id){
-    let quantity = $('#custom_counter'+item_id).val(); 
-    let attr_id =  $(`input[name="attr_${item_id}"]:checked`).val();
-    
+function add_to_cart(item_id) {
+    let quantity = $('#custom_counter' + item_id).val();
+    let attr_id = $(`input[name="attr_${item_id}"]:checked`).val();
+    let added_div = $('#add_data_'+attr_id);
+
+
+    $.ajax({
+        type: "POST",
+        url: "save_cart_data.php",
+        data: {
+            qnty: quantity,
+            at_id: attr_id,
+            type: 'add',
+        },
+        success: function(data) {
+            let dt = JSON.parse(data);
+            if (dt.msg == 'no_login') {
+                window.location.href = 'login.php';
+            } else if (dt.status == 'success') {
+                added_div.html('(Added) ' + quantity);
+                Swal.fire({
+                    title: "Good job!",
+                    text: dt.msg,
+                    icon: "success"
+                });
+            } else if (dt.status == 'error') {
+                Swal.fire({
+                    title: "Good job!",
+                    text: dt.msg,
+                    icon: "error"
+                });
+            }
+        }
+    })
 }
 </script>
